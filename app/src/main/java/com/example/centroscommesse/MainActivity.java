@@ -1,7 +1,9 @@
 package com.example.centroscommesse;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -24,14 +26,35 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     EditText editTextIp = findViewById(R.id.IP);
-                    String ip = editTextIp.getText().toString();
-
                     EditText editTextPorta = findViewById(R.id.porta);
+                    String ip = editTextIp.getText().toString();
                     int porta = Integer.parseInt(editTextPorta.getText().toString());
+                    String masterKey = "123456789";
 
-                    //Socket socket = new Socket("192.168.244.85", 8080);
-                    //Client client = new Client(socket);
-                    startActivity(new Intent(MainActivity.this, Scommesse.class));
+                    EditText inputEditTextField = new EditText(MainActivity.this);
+                    AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                            .setTitle("Master Key")
+                            .setMessage("Se sei un Master, inserisci la Master Key (altrimenti lascia vuoto)")
+                            .setView(inputEditTextField)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    String input = inputEditTextField.getText().toString();
+
+                                    if (input.equals("")) {
+                                        // start regular client activity
+                                        //Socket socket = new Socket("192.168.244.85", 8080);
+                                        //Client client = new Client(socket);
+                                        startActivity(new Intent(MainActivity.this, Scommesse.class));
+                                    }
+                                    else if (input.equals(masterKey)) {
+                                        // start master activity
+                                    }
+                                }
+                            })
+                            .setNegativeButton("Cancel", null)
+                            .create();
+                    dialog.show();
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(),"Errore durante la connessione al server! Riprovare.",Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
