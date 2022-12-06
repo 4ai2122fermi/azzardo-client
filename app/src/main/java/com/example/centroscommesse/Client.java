@@ -13,7 +13,7 @@ public class Client {
 
         //System.out.println("😃 Server found!\n");
         // this isn't something you should be happy about
-        System.out.println("Server found!\n");
+        System.out.println("Server found.\n");
         response = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
         request = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
     }
@@ -45,7 +45,7 @@ public class Client {
     }
 
     public int bet(int stake, int number) throws IOException, NoMoneyException, NoReadyException {
-        request.write(String.format("PUNTATA,%d,%d", stake, number));
+        request.write(String.format("PUNTATA,%d,%d\r\n", stake, number));
         String msg = response.readLine();
         if (msg.equalsIgnoreCase("LOST"))
             return -stake;
@@ -53,7 +53,7 @@ public class Client {
             throw new NoMoneyException("Match hasn't started yet");
         if (msg.equalsIgnoreCase("NOMONEY"))
             throw new NoMoneyException("Balance cashed out");
-        if (msg.equalsIgnoreCase("LOST"))
+        if (msg.equalsIgnoreCase("LOST\r\n"))
             return -stake;
         String[] command = msg.split(",");
         return Integer.parseInt(command[1]);

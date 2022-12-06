@@ -43,12 +43,22 @@ public class MainActivity extends AppCompatActivity {
 
                                     if (input.equals("")) {
                                         // start regular client activity
-                                        //Socket socket = new Socket("192.168.244.85", 8080);
-                                        //Client client = new Client(socket);
+                                        Socket socket = null;
+                                        Client client = null;
+                                        try {
+                                            socket = new Socket("192.168.244.85", 8080);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        try {
+                                            client = new Client(socket);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
                                         startActivity(new Intent(MainActivity.this, Scommesse.class));
                                     }
                                     else if (input.equals(masterKey)) {
-                                        // start master activity
+                                        // FIXME: this branch should not exist, client doesn't know the masterKey a priori
                                     }
                                 }
                             })
